@@ -1,77 +1,43 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client'
-import './Home.css'
-import { ResponseChat } from './Response';
-import { ReviewResponse } from './ReviewResponse'; 
+import styles from './page.module.css';
+import {Information} from "./Information";
+import {Recomendation} from "./Recomendation";
+import React, { useContext } from 'react';
 
-function Home() {
-  eval
-  const [message, setMessage] = useState('');
-  const [result, setResult] = useState('console.log("hello world")')
-  const [createComponent, setCreateComponent] = useState(null)
-  const handleMessageChange = (event) => {
-    setMessage(event.target.value);
-  };
+import { ItemsContext } from '../providers/ItemsContex';
+import { Navbar } from '../UI-components/Navbar';
+import { SliderCategories } from './SliderCategories';
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (message.length > 5 ) {
-      
-      const res = await fetch('api/v1/recommended/get-recomended',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          question: message
-        })
-      })
-      
-      if (res.status == 200){
-        const data = await res.json()
-        console.log(data)
-        setResult(data)
+
+
+
+  
+function Home () {  
+  const {products} = useContext(ItemsContext)
+  const data = products[0]
+
+    return (<>
+      <div className={styles.container}>
+
+        <Navbar/>
+
+        <div className={styles.spaceBetween}>
+
+          <div className={styles.productDescription}>
+          <span  className={styles.title}>TOP SALE</span>
+          <span className={styles.description}>{data.product}</span>
+          <button className={styles.shopButton}>SHOP NOW</button>
+          </div>
+
+          <div className={styles.productImage}>
+          <img className={styles.principalImg} alt={data.product} src='/assets/oneitem.png'></img>
+          </div>
         
-
-        const result = await Babel.transform(data, {presets: ['env', 'react']}).code 
-        
-        console.log(result)
-        const RenderComponent = await eval(result)?.default
-        
-        console.log(RenderComponent)
-
-        const reviewComponent = ReactDOM.createRoot(document.getElementById("review-component"))
-        reviewComponent.render(<RenderComponent/>)
-      }else{
-        console.log('Error')
-      }
-    }
- 
-    
-    setMessage('');
-  };
-
-
-  return (
-    <div className='home-container'>
-      <div className='cards-container'>
-        <ReviewResponse values = {{createComponent}}></ReviewResponse>
-        <ResponseChat values = {{result}}/>
+        </div>
+        <SliderCategories/>
+        <Information/>
+        <Recomendation/>
       </div>
+      </>);
+  }
 
-
-
-     <form onSubmit={handleSubmit} className="chat-input-container">
-      <input
-        type="text"
-        placeholder="Escribe un mensaje..."
-        value={message}
-        onChange={handleMessageChange}
-      />
-      <button type="submit">Enviar</button>
-    </form>
-    </div>
-  );
-}
-
-export {Home};
+  export {Home}

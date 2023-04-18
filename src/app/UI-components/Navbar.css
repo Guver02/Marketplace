@@ -1,0 +1,51 @@
+.logo{
+    font-family: 'Quicksand', sans-serif;
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+.navContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: #000;
+    box-sizing: border-box;
+    height: 60px;
+    align-items: center;
+    padding: 0 12px;
+    background-color: #fff;
+}
+.navContainer a{
+    text-decoration: none;
+}
+
+.inputContainer{
+    background-color: inherit;
+    border-radius: 16px;
+    box-sizing: border-box;
+    border: 2px solid #9ba09c;
+    padding: 0 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    margin: 0 8px;
+}
+
+.inputContainer input{
+    background-color: inherit;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+.options{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.options span:hover{
+    cursor: pointer;
+}

@@ -1,0 +1,130 @@
+.container-product-page{
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    color: #000;
+    height: calc(100vh - 60px);
+}
+
+.product-details-container{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Quicksand', sans-serif;
+    width: 55%;
+    background-color: #fff;
+    padding: 44px;
+    height: 100%;
+    box-sizing: border-box;
+    
+}
+.product-details{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px;
+}
+.product-details-container > div:nth-child(1) > span:nth-child(1){
+    color: yellow;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: end;
+}
+.title{
+    font-weight: bolder;
+    font-size: 24px;
+    font-family: 'Quicksand', sans-serif;
+    text-align: end;
+    padding-top: 24px;
+}
+.price{
+    font-weight: bolder;
+    font-size: 28px;
+    font-family: 'Quicksand', sans-serif;
+    text-align: end;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+
+
+.product-images{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 45%;
+    background-color:rgba(233,233,231,255);
+    box-sizing: border-box;
+}
+.product-images > img{
+    max-width: 60%;
+    object-fit: cover;
+    padding: 44px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.product-images > div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.product-images > div  img {
+    height: 130px;
+    width: 130px;
+    object-fit: cover;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.options-container{
+    display: flex;
+    flex-direction: column;
+}
+.index-options{
+    font-weight: bold;
+    font-size: 14px;
+    font-family: 'Quicksand', sans-serif;
+    text-align: start;
+    padding-top: 24px;
+}
+.details{
+    font-weight: normal;
+    font-size: 12px;
+    font-family: 'Quicksand', sans-serif;
+    text-align: start;
+    padding-top: 8px;
+    color: gray;
+}
+
+.buttons-container{
+    padding-top: 64px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.buttons-container > button:nth-child(2){
+    padding: 20px 40px;
+    background-color: #fff;
+    border: 2px solid #000;
+    box-sizing: border-box;
+    font-weight: bold;
+    border-radius: 2px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.buttons-container > button:nth-child(1){
+    padding: 20px 40px;
+    background-color: #000;
+    box-sizing: border-box;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
