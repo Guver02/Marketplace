@@ -3,29 +3,27 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { InputWithMessages } from "./InputWithMessages";
-import { Navbar } from "../../UI-components/Navbar";
+
 import './ProductPage.css'
+import { Navbar } from "../UI-components/Navbar";
+import SliderColors from "./SliderColors";
   
 function ProductPage () {  
-  const [all, setAll] = useState([]) 
+ 
   const [data, setData] = useState(null)
+  
   const {id} = useParams()
 
     useEffect(() => {
 
-      fetch(`/api/v1/products`)
-      .then(res => res.json())
-      .then((resParsed) => {
-        setAll(resParsed)
-      })
-
       fetch(`/api/v1/products/${id}`)
       .then(res => res.json())
       .then((resParsed) => {
+        console.log(resParsed)
         setData(resParsed)
       })
       
-    }, [])
+    }, [id])
 
     const handleBuyNow = async (item) => {
 
@@ -106,13 +104,20 @@ function ProductPage () {
           <span className="title">{data?.product}</span>
           <span className="price">{`$ ${data?.price}`}</span>
 
-          <InputWithMessages values= {{productid: id}}/>
+          <InputWithMessages values= {{productId: id}}/>
 
           
           </div>
         
           <div>
-
+          <span className="index-options">COLORES</span>
+            {
+              data ? 
+              <SliderColors values={{myColors: data.myColors}}/>
+              :
+              <></>
+            }
+            
             <div className="options-container">
             <span className="index-options">DETALLES</span>
             <span className="details">{data?.details}</span>

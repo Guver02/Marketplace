@@ -1,6 +1,6 @@
 .logo{
     font-family: 'Quicksand', sans-serif;
-    background-color: #fff;
+    
     color: #000;
     font-weight: bold;
     font-size: 32px;
@@ -12,10 +12,13 @@
     justify-content: space-between;
     color: #000;
     box-sizing: border-box;
-    height: 60px;
+    height: 7vh;
     align-items: center;
     padding: 0 12px;
-    background-color: #fff;
+    background-color: rgba(233,233,231,255);
+    position: fixed;
+    z-index: 100;
+    width: 100%;
 }
 .navContainer a{
     text-decoration: none;
@@ -41,6 +44,10 @@
     padding: 0;
     border: none;
 }
+.inputContainer input:focus {
+    outline: none;
+  }
+  
 .options{
     display: flex;
     flex-direction: row;

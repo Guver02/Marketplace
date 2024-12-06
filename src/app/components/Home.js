@@ -22,17 +22,18 @@ function Home () {
 
         <div className={styles.spaceBetween}>
 
+          <div className={styles.productImage}>
+          <img className={styles.principalImg} alt={data.product} src='/assets/maceta.png'></img>
+          </div>
+
           <div className={styles.productDescription}>
           <span  className={styles.title}>TOP SALE</span>
           <span className={styles.description}>{data.product}</span>
-          <button className={styles.shopButton}>SHOP NOW</button>
-          </div>
-
-          <div className={styles.productImage}>
-          <img className={styles.principalImg} alt={data.product} src='/assets/oneitem.png'></img>
+          <button className={styles.shopButton}>SHOP NOW!</button>
           </div>
         
         </div>
+        
         <SliderCategories/>
         <Information/>
         <Recomendation/>

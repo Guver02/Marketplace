@@ -1,5 +1,5 @@
 const config = require('./../configuration/config')
-const axios = require('axios')
+//const axios = require('axios')
 const {Sequelize} = require ('sequelize');
 
 //const setupModles= require('./models/index')
@@ -19,8 +19,9 @@ const sequelize = new Sequelize(
       }
 });
 
-sequelize.authenticate().then( (e) =>{console.log('conectado con sequelize')}).catch(e=>{console.log(e)})
 
+
+sequelize.authenticate().then( (e) =>{console.log('conectado con sequelize')}).catch(e=>{console.log(e)})
 
 
 setupModels(sequelize);

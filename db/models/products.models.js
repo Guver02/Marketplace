@@ -62,6 +62,11 @@ class Products  extends Model{
             through: models.productcategories,
             as: 'myCategories',
           });
+
+          this.belongsToMany(models.colors, {
+            through: models.productcolors,
+            as: 'myColors',
+          });
     }
 
     static config(sequelize){

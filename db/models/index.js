@@ -8,6 +8,8 @@ const { ProductsPurchase, schemaProductsPurchaseSeq} = require('./productspurcha
 const { Provider, schemaProvidersSeq } = require('./providers.model')
 const { ProductCategories, schemaProductCategoriesSeq } = require('./productcategories.model')
 const { Categories, schemaCategoriesSeq } = require('./categories.model')
+const { Color, schemaColorSeq } = require('./colors.models')
+const { ProductColors, schemaProductColorsSeq } = require('./productcolors.model')
 //const { Notify, schemaNotifySeq} = require('./notifyModel')
 
 
@@ -23,6 +25,8 @@ function setupModels(sequelize) {
     Provider.init(schemaProvidersSeq, Provider.config(sequelize))
     ProductCategories.init(schemaProductCategoriesSeq, ProductCategories.config(sequelize))
     Categories.init(schemaCategoriesSeq, Categories.config(sequelize))
+    Color.init(schemaColorSeq, Color.config(sequelize))
+    ProductColors.init(schemaProductColorsSeq, ProductColors.config(sequelize))
 
     Products.associate(sequelize.models)
     RecomendationsLevel.associate(sequelize.models)
@@ -30,6 +34,8 @@ function setupModels(sequelize) {
     Orders.associate(sequelize.models)
     ProductCategories.associate(sequelize.models)
     Categories.associate(sequelize.models)
+    Color.associate(sequelize.models)
+    ProductColors.associate(sequelize.models)
 }
 
 

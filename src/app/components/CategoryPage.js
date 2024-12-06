@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 
 
 
-import './id/ProductPage.css'
+import './ProductPage.css'
 import { SliderCategories } from "./SliderCategories";
 import { ProductsGalery } from "./ProductsGalery";
 import { Navbar } from "../UI-components/Navbar";
