@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {getTypeMessage} from './MessagesType'
 import './InputWithMessages.css';
 import { Modal } from '../modal';
-import { ProductInfo } from './ProductInfo';
+import { ProductChat } from './ProductChat';
 import { Chat } from './Chat';
 
 const InputWithMessages = ({values}) => {
@@ -23,7 +23,7 @@ const InputWithMessages = ({values}) => {
 
   return (
     <Modal>
-      <ProductInfo values={{productId: productId}} functions={{setProductId}}/>
+      <ProductChat values={{productId: productId}} functions={{setProductId}}/>
       <Chat values={{productId}} functions={{setChatOPen}}/>
       
     </Modal>

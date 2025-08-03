@@ -1,24 +1,53 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Spinner } from "../assets/Spinner";
 import { useFetch } from "../custom-hooks/useFetch";
+import { useData } from "../custom-hooks/useData";
+import { dataController } from "../controllers/DataController";
 
-const ItemsContext =  createContext()
+const ItemsContext = createContext()
 
-function ItemsContextProvider({children}) {
-    const [products, isProductsLoading, errorProducts] = useFetch('/api/v1/products')
+function ItemsContextProvider({ children }) {
     
+    const [products, isProductsLoading, errorProducts] = useFetch('/api/v1/products')
+    const [data, dispatch, loadingData] = useData()
+    
+    const {shoppingCart, userData, isLoging} = data
 
-    if(isProductsLoading){
-        return <Spinner/>
+    const getIsLoging = () => isLoging
+
+    const {addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging} = dataController(dispatch, getIsLoging)
+
+    if (isProductsLoading || loadingData) {
+        return <Spinner />
     }
 
     return (
         <ItemsContext.Provider value={{
-            products
+            products,
+            shoppingCart, userData, isLoging,
+            addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging
         }}>
             {children}
         </ItemsContext.Provider>
     );
 }
 
-export {ItemsContextProvider, ItemsContext}
+const useStore = () => {
+    const context = useContext(ItemsContext);
+    const {
+            products,
+            shoppingCart, userData, isLoging,
+            addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging
+        } = context;
+
+    if (!context) {
+        throw new Error("useStore must be used within a ItemsContextProvider");
+    }
+    return {
+            products,
+            shoppingCart, userData, isLoging,
+            addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging
+        };
+};
+
+export { ItemsContextProvider, ItemsContext, useStore }

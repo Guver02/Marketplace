@@ -1,34 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./SliderCategories.css";
 import { Link } from "react-router-dom";
+import { useIntersection } from "../custom-hooks/useIntersection";
 
-function SliderCategories() {
-  const [categories, setCategories] = useState([])
+function SliderCategories({setIsIntersecting }) {
+    const [categories, setCategories] = useState([])
 
-  useEffect(() => {
     const getCategories = async () => {
-      const res = await fetch(`api/v1/categories/all`)
-      const data = await res.json()
-
-      setCategories(data)
+        const res = await fetch(`api/v1/categories/all`)
+        const data = await res.json()
+        setCategories(data)
     }
 
-    getCategories()
-  }, [])
+    const [sliderElem, sliderIsIntersecting] = useIntersection({
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0 //el 100% del elemento
+    })
 
-  return (
-    <div className="slider-container">
-      <div className="slider">
-        {categories.map((category, index) => (
-          <Link key={index} to={`/categories/${category.id}`}>
-          <div  className="category">
-            {category.category}
-          </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
+    useEffect(() => {
+        getCategories()
+    }, [])
+
+    useEffect(() => {
+        if(sliderIsIntersecting) setIsIntersecting(true)
+    }, [sliderIsIntersecting])
+
+    
+
+    return (
+        <div className="slider-container"
+            ref={sliderElem}>
+            <div className="slider">
+                {categories.map((category, index) => (
+                    <Link key={index} to={`/categories/${category.id}`}>
+                        <div className="category">
+                            {category.category}
+                        </div>
+                    </Link>
+                ))}
+            </div>
+        </div>
+    );
 }
 
-export {SliderCategories};
+export { SliderCategories };

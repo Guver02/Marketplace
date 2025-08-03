@@ -1,44 +1,74 @@
 import styles from './page.module.css';
-import {Information} from "./Information";
-import {Recomendation} from "./Recomendation";
-import React, { useContext } from 'react';
-
+import { Information } from "./Information";
+import { Recomendation } from "./Recomendation";
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ItemsContext } from '../providers/ItemsContex';
-import { Navbar } from '../UI-components/Navbar';
 import { SliderCategories } from './SliderCategories';
+import { animateScrollTo } from '../utils/UtilFunctions';
+import { useIntersection } from '../custom-hooks/useIntersection';
+import { DetailsCard } from './DetailsCard';
+import ProductInformation from './ProductInformation';
+
+function Home() {
+    const { products } = useContext(ItemsContext)
+    const data = products[0]
+    const scrollPoint = window.innerHeight - (window.innerHeight / 100) * 7;
+
+    const [downIsIntersecting, setDownIsIntersecting] = useState(false)
+
+    const principalContainer = useRef(null)
+
+    const [bannerElem, bannerIsIntersecting] = useIntersection({
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1 //el 10% del elemento
+    })
 
 
+    useEffect(() => {
+        if (downIsIntersecting) animateScrollTo(scrollPoint, principalContainer)
+    }, [downIsIntersecting])
+
+    useEffect(() => {
+        if (bannerIsIntersecting) {
+            animateScrollTo(0, principalContainer)
+            setTimeout(() => {
+                setDownIsIntersecting(false)
+            }, 800)
+        }
+    }, [bannerIsIntersecting])
+
+    return (
+        <div className={styles.container}
+            ref={principalContainer}>
+
+            <div className={styles.colorsContainer} ref={bannerElem}>
+                <div className={styles.topColor}></div>
+                <div className={styles.bottomColor}></div>
+
+                <div className={styles.banner} >
+
+                    <div className={styles.productImage}>
+                        <img className={`${styles.principalImg} ${downIsIntersecting ? styles.hiddenImg : ''}`}
+                            alt={data.product}
+                            src='/assets/maceta6.png'></img>
+                    </div>
+
+                    <div className={styles.productInfo}>
+                        <ProductInformation/>
+                        <DetailsCard downIsIntersecting={downIsIntersecting} />
+                    </div>
+
+                </div>
+            </div>
 
 
-  
-function Home () {  
-  const {products} = useContext(ItemsContext)
-  const data = products[0]
-
-    return (<>
-      <div className={styles.container}>
-
-        <Navbar/>
-
-        <div className={styles.spaceBetween}>
-
-          <div className={styles.productImage}>
-          <img className={styles.principalImg} alt={data.product} src='/assets/maceta.png'></img>
-          </div>
-
-          <div className={styles.productDescription}>
-          <span  className={styles.title}>TOP SALE</span>
-          <span className={styles.description}>{data.product}</span>
-          <button className={styles.shopButton}>SHOP NOW!</button>
-          </div>
-        
+            <SliderCategories setIsIntersecting={setDownIsIntersecting} />
+            <Information />
+            <Recomendation />
         </div>
-        
-        <SliderCategories/>
-        <Information/>
-        <Recomendation/>
-      </div>
-      </>);
-  }
+    );
+}
 
-  export {Home}
+export { Home }
+

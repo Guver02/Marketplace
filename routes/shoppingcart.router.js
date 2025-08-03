@@ -1,47 +1,67 @@
 const express = require('express')
 const router = new express.Router()
-const {models} = require('../db/connec')
-const sequelize = require('../db/connec');
+const { models } = require('../db/connec')
+const { authenticateToken } = require('../middlewares/authToken.middleware');
+const { SHOPPING_CART_TABLE } = require('../db/models/shoppingcart.models');
 
-router.get('/',async (req,res) =>{
-    const userid = 1
-    const rsp = await models.shoppingcart.findAll({
-        where: {
-            userid: userid
+router.get('/my-cart',
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const userID = req.user.id
+
+            const shoppingCart = await models[SHOPPING_CART_TABLE].findAll({
+                where: {
+                    userid: userID
+                },
+                include: {
+                    model: models.products,
+                    as: 'productInCart',
+                    attributes: ['id', 'product', 'price', 'image']
+                }
+            })
+
+            res.json(shoppingCart)
+        } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error' })
         }
     })
 
-    res.json(rsp)
-})
+router.post('/add-cartitem',
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const userID = req.user.id
+            const { productId, quantity } = req.body
 
-router.post('/add-product',async (req,res) =>{
-    const {productid} = req.body
-    console.log(productid)
-    const userid = 1
-    const rsp = await models.shoppingcart.create({
-        productid: productid,
-        userid: userid
+            const cartItem = await models[SHOPPING_CART_TABLE].create({
+                productid: productId,
+                quantity: quantity,
+                userid: userID
+            })
+
+            res.json(cartItem)
+        } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error' })
+        }
     })
 
-    res.json(rsp)
-})
+router.post('/clear-cart',
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const userID = req.user.id
 
-router.post('/clear', async (req,res) =>{
-    //const {productid} = req.params
-    const userid = 1
-    try {
-        await models.shoppingcart.destroy({
-          where: {
-            userid: userid
-          }
-        });
-        console.log('Se eliminaron todas las filas donde userid=1.');
-    } catch (error) {
-        console.error('Error al eliminar las filas:', error);
-    }
-      
+            const deleteCart = await models[SHOPPING_CART_TABLE].destroy({
+                where: {
+                    userid: userID
+                }
+            });
 
-    res.json(userid)
-})
+            res.json(deleteCart)
+        } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error' })
+        }
+    })
 
 module.exports = router 

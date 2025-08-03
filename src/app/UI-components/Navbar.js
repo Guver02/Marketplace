@@ -1,47 +1,51 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import { CartButton } from "../components/CartButton";
+import { Link, useNavigate } from "react-router-dom";
 import './Navbar.css'
-import { ProductsList } from "./ProductsList";
-import { ItemsContext } from "../providers/ItemsContex";
+import {ShoppingBag} from "lucide-react"
+import {useModal} from "../providers/ModalContext"
+import {ShoppingCart} from "../components/ShoppingCart"
+import { useStore } from "../providers/ItemsContex";
 
 function Navbar() {
-    const [search, setSearch] = useState('')
-    const { products } = useContext(ItemsContext)
+    const {openModal} = useModal()
+    const {isLoging, shoppingCart} = useStore()
+    const navigate = useNavigate()
 
-    const filterProducts = (query) => {
-        return products.filter(
-          (elem) =>
-            elem.product.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        );
-      };
+    const handleOpenCart = () =>  {
+        openModal(<ShoppingCart/>)
+    }    
 
-    const items = filterProducts(search)
+    console.log(shoppingCart)
 
     return (
         <nav className="navContainer">
 
-            <Link to={`/`}> 
-            <span className="logo">MARKET</span>
+            <Link to={`/`}>
+                <span className="logo">Plantae</span>
             </Link>
-            <div className="options">
 
-              <div className="inputContainer">
-              <input 
-              placeholder="Buscar en Market"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              ></input>
-              <span className="material-symbols-outlined">search</span>
-              
-              </div>
-              {(search.length >= 1) &&
-                    <ProductsList items={items}/>
-              }
-              <CartButton></CartButton>
+            <div className="options">
+                <span className="item">MORE</span>
+                <span className="item">WISHLIST</span>
+                <span className="item">SEARCH</span>
             </div>
-</nav>
+
+            <div className="rightOptions">
+                {isLoging ?
+                    <span className="item">ACCOUNT</span>
+                    :
+                    <button className="login-button"
+                    onClick={() => navigate('/login')}>Iniciar Sesion</button>
+                }
+                <div className="item">
+                    <ShoppingBag onClick={handleOpenCart}/>
+                    <span className="counter">{shoppingCart.length}</span>
+                </div>
+                
+            </div>
+
+        </nav>
     );
 }
 
-export {Navbar}
+export { Navbar }

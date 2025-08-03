@@ -1,0 +1,65 @@
+.wrapper {
+    box-sizing: border-box;
+    border-radius: 12px;
+    max-width: 600px;
+    font-family: 'Georgia', serif;
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.reviewCount {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #000;
+}
+
+.title {
+    margin: 1rem 0 0.25rem;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.subtitle {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.description {
+    padding: 0 56px;
+    box-sizing: border-box;
+    margin-top: 56px;
+    color: #333;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+@media screen and (max-width: 767px) {
+    .description,
+    .subtitle,
+    .stars,
+    .reviewCount,
+    .price{
+        display: none;
+    }
+    .title{
+        font-size: 1.8rem;
+    }
+}

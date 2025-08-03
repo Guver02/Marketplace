@@ -1,21 +1,19 @@
 .informationContainer{
-    background-color: rgba(233,233,231,255);
-    margin: 48px 24px;
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
+    margin: 48px auto;
+    display: grid;
+    max-width: 1220px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    column-gap: 16px;
+    row-gap: 16px
 }
 .cardInformation{
+    background-color: rgba(233,233,231,255);
     padding: 8px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     color: #000;
     align-items: center;
-}
-
-.cardInformation:hover{
-    box-shadow: 0px 1px 2px -1px #000;
 }
 
 .cardInformation > span:nth-child(1){

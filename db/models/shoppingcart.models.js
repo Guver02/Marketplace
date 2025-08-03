@@ -42,9 +42,9 @@ const shoppingCartSchema = {
 
 class ShoppingCart extends Model {
   static associate(models) {
-    this.hasMany(models.products, {
+    this.belongsTo(models.products, {
       foreignKey: 'productid',
-      as: 'mycart',
+      as: 'productInCart',
     });
   }
 

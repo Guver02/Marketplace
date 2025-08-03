@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import './ProductInfo.css'
+import './ProductChat.css'
 
-function ProductInfo ({values, functions}) {
+function ProductChat ({values, functions}) {
     const {productId} = values
     const {setProductId} = functions
     const [data, setData] = useState(null)
@@ -43,4 +43,4 @@ function ProductInfo ({values, functions}) {
     </div>);
 }
 
-export {ProductInfo}
+export {ProductChat}

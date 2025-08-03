@@ -1,10 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-
-
-
-import './ProductPage.css'
 import { SliderCategories } from "./SliderCategories";
 import { ProductsGalery } from "./ProductsGalery";
 import { Navbar } from "../UI-components/Navbar";

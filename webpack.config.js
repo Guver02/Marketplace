@@ -44,7 +44,7 @@ module.exports = {
     },
     
     devServer: {
-        port: 4000,
+        port: 3201,
         open: true,
         client: {
             overlay: true, // Configuración correcta para overlay
@@ -54,7 +54,7 @@ module.exports = {
         },
         proxy: {
             '/api': {
-                target: 'http://localhost:3100',
+                target: 'http://localhost:3200',
                 changeOrigin: true,
             },
         },

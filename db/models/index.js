@@ -1,4 +1,3 @@
-//EXPORTACION DENUESTROS MODELOS
 const { Products, schemaProductsSeq} = require('./products.models')
 const { RecomendationsLevel, schemaRecomendationsLevelSeq} = require('./recomendationslevel.models')
 const { ShoppingCart, shoppingCartSchema} = require('./shoppingcart.models')
@@ -10,13 +9,11 @@ const { ProductCategories, schemaProductCategoriesSeq } = require('./productcate
 const { Categories, schemaCategoriesSeq } = require('./categories.model')
 const { Color, schemaColorSeq } = require('./colors.models')
 const { ProductColors, schemaProductColorsSeq } = require('./productcolors.model')
-//const { Notify, schemaNotifySeq} = require('./notifyModel')
+const { User, schemaUsersSeq} = require('./users.model')
 
-
-// INICIACION DE MODELOS PARA EXPORTAR
 function setupModels(sequelize) {
-
-    Products.init(schemaProductsSeq,Products.config(sequelize) )
+    User.init(schemaUsersSeq, User.config(sequelize))
+    Products.init(schemaProductsSeq,Products.config(sequelize))
     RecomendationsLevel.init(schemaRecomendationsLevelSeq,RecomendationsLevel.config(sequelize) )
     ShoppingCart.init(shoppingCartSchema, ShoppingCart.config(sequelize))
     Orders.init(schemaOrdersSeq, Orders.config(sequelize))
@@ -36,7 +33,7 @@ function setupModels(sequelize) {
     Categories.associate(sequelize.models)
     Color.associate(sequelize.models)
     ProductColors.associate(sequelize.models)
+    ShoppingCart.associate(sequelize.models)
 }
-
 
 module.exports = setupModels
