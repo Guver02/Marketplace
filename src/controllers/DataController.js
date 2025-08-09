@@ -112,7 +112,7 @@ const dataController = (dispatchState, getIsLoging) => {
     }
 
     //ShopActions
-    async function shopOneProducts(id, showErrors) {
+    async function shopOneProduct(id, showErrors) {
         try{
             const data = await shopApiRepo.shopOne(id)
             if(data.error) throw data.error
@@ -132,6 +132,7 @@ const dataController = (dispatchState, getIsLoging) => {
         clearCart,
         setUserData,
         setIsLoging,
+        shopOneProduct,
         login,
         logout
     };

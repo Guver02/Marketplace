@@ -15,7 +15,7 @@ function ItemsContextProvider({ children }) {
    
     const getIsLoging = () => isLoging
 
-    const {addToCart, removeFromCart, clearCart, setUserData, setIsLoging, login,logout} = dataController(dispatch, getIsLoging)
+    const {addToCart, removeFromCart, clearCart, setUserData, setIsLoging, login, logout, shopOneProduct} = dataController(dispatch, getIsLoging)
     
     if (isProductsLoading || loadingData) {
         return <Spinner />
@@ -27,7 +27,7 @@ function ItemsContextProvider({ children }) {
 
             shoppingCart, userData, isLoging,
             addToCart, removeFromCart, clearCart, setUserData, setIsLoging,
-            login, logout
+            login, logout, shopOneProduct
         }}>
             {children}
         </ItemsContext.Provider>
@@ -39,7 +39,7 @@ const useStore = () => {
     const {
             products,
 
-            shoppingCart, userData, isLoging,
+            shoppingCart, userData, isLoging, shopOneProduct,
             addToCart, removeFromCart, clearCart, setUserData, setIsLoging,
             login, logout
         } = context;
@@ -49,7 +49,7 @@ const useStore = () => {
     }
     return {
             products,
-            shoppingCart, userData, isLoging,
+            shoppingCart, userData, isLoging, shopOneProduct,
             addToCart, removeFromCart, clearCart, setUserData, setIsLoging,
             login, logout
         };

@@ -7,7 +7,7 @@ import {useStore} from '../providers/ItemsContex'
 const ProductPage = () => {
     const [tab, setTab] = useState('description');
     const [product, setProduct] = useState(null)
-    const {addToCart} = useStore()
+    const {addToCart, shopOneProduct} = useStore()
     const { id } = useParams()
 
     useEffect(() => {
@@ -27,37 +27,7 @@ const ProductPage = () => {
     }
 
     const handleBuyNow = async () => {
-        
-        const prevPurchase = await fetch('api/v1/previous-purchase/onecheck',{
-            method: 'POST',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-              },
-            credentials: 'include',
-            body: JSON.stringify({
-                productId: id
-            })
-        })
-
-        const {purchaseId, totalPrice} = await prevPurchase.json()
-        console.log(purchaseId, totalPrice)
-
-        const res = await fetch('/api/v1/checkouts/create-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                price: totalPrice.toFixed(2),
-                purchaseid: purchaseId
-            }),
-
-        })
-
-        const data = await res.json()
-        console.log(data)
-        window.location.replace(data.href);
+        shopOneProduct(id)
     }
 
     if (!product) return <></>
