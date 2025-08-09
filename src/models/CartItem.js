@@ -9,9 +9,9 @@ class CartItem {
         }
 
         this.id = id ?? null;
-        this.productId = productId;
+        this.productid = productId;
         this.quantity = quantity;
-        this.createdAt = new Date(createdAt);
+        this.createdat = new Date(createdAt);
     }
 
     toJSON() {
@@ -22,6 +22,7 @@ class CartItem {
             createdAt: this.createdAt.toISOString(),
         };
     }
+
 
     static fromStorage(raw) {
         return new CartItem({

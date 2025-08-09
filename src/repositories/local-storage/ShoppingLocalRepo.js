@@ -22,10 +22,6 @@ class ShoppingLocalRepo {
         this.saveCart(cart);
     }
 
-    saveCart(cart) {
-        localStorage.setItem("cart", JSON.stringify(cart.map(item => item.toJSON())));
-    }
-
     remove(productId) {
         const updated = this.getCart().filter(item => item.productId !== productId);
         this.saveCart(updated);

@@ -25,6 +25,12 @@ const schemaUsersSeq = {
         type: DataTypes.STRING(250),
         allowNull: false,
     },
+    role: {
+        type: Sequelize.ENUM('customer','seller','admin'),
+        allowNull: false,
+        defaultValue: 'cliente'
+    }
+
 };
 
 class User extends Model {

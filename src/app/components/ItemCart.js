@@ -11,7 +11,7 @@ function ItemCart({item}) {
 
             <div className={styles.imageSection}>
                 <img
-                    src={item.image}
+                    src={item.productData.images[0].imageurl}
                     alt="ACID WASH T-shirt"
                     className={styles.image}
                 />
@@ -19,7 +19,7 @@ function ItemCart({item}) {
 
             <div className={styles.details}>
                 <p className={styles.category}>T-shirts</p>
-                <h3 className={styles.title}>{item.product}</h3>
+                <h3 className={styles.title}>{item.productData.product}</h3>
                 <p className={styles.text}>Size : Medium</p>
                 <p className={styles.text}>Color : Blue grey</p>
                 <div className={styles.badges}>
@@ -28,13 +28,13 @@ function ItemCart({item}) {
                 </div>
                 <div className={styles.quantity}>
                     <button>-</button>
-                    <span>1</span>
+                    <span>{item.quantity}</span>
                     <button>+</button>
                 </div>
                 <div className={styles.footer}>
-                    <span className={styles.price}>{`$ ${item.price}`}</span>
+                    <span className={styles.price}>{`$ ${item.productData.price}`}</span>
                     <span className={styles.originalPrice}>$20.00</span>
-                    <Trash2 onClick={() => removeFromCart(item.id)}/>
+                    <Trash2 onClick={() => removeFromCart(item.productData.id)}/>
                 </div>
             </div>
             

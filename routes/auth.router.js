@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
     delete userPlain.password
     delete userPlain.userip
 
-    const payload = {user: userData.user, id: userData.id}    
+    const payload = {user: userData.user, id: userData.id, role: userData.role}    
     const token = generateAccessToken(payload)
 
     res.cookie('token', token, options)
@@ -72,7 +72,7 @@ router.post('/signup', async (req, res) => {
     delete userPlain.password
     delete userPlain.userip
     
-    const payload = {user: userPlain.user, id: userPlain.id}    
+    const payload = {user: userPlain.user, id: userPlain.id, role: userPlain.role}    
     const token = generateAccessToken(payload)
 
     res.cookie('token', token, options)

@@ -10,6 +10,7 @@ const { Categories, schemaCategoriesSeq } = require('./categories.model')
 const { Color, schemaColorSeq } = require('./colors.models')
 const { ProductColors, schemaProductColorsSeq } = require('./productcolors.model')
 const { User, schemaUsersSeq} = require('./users.model')
+const { ProductImages, schemaProductImagesSeq } = require('./productimages.models.js')
 
 function setupModels(sequelize) {
     User.init(schemaUsersSeq, User.config(sequelize))
@@ -24,6 +25,7 @@ function setupModels(sequelize) {
     Categories.init(schemaCategoriesSeq, Categories.config(sequelize))
     Color.init(schemaColorSeq, Color.config(sequelize))
     ProductColors.init(schemaProductColorsSeq, ProductColors.config(sequelize))
+    ProductImages.init(schemaProductImagesSeq, ProductImages.config(sequelize))    
 
     Products.associate(sequelize.models)
     RecomendationsLevel.associate(sequelize.models)

@@ -2,21 +2,21 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Spinner } from "../assets/Spinner";
 import { useFetch } from "../custom-hooks/useFetch";
 import { useData } from "../custom-hooks/useData";
-import { dataController } from "../controllers/DataController";
+import { dataController } from "../../controllers/DataController";
 
 const ItemsContext = createContext()
 
 function ItemsContextProvider({ children }) {
     
     const [products, isProductsLoading, errorProducts] = useFetch('/api/v1/products')
-    const [data, dispatch, loadingData] = useData()
-    
-    const {shoppingCart, userData, isLoging} = data
 
+    const [data, dispatch, loadingData] = useData()
+    const {shoppingCart, userData, isLoging} = data
+   
     const getIsLoging = () => isLoging
 
-    const {addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging} = dataController(dispatch, getIsLoging)
-
+    const {addToCart, removeFromCart, clearCart, setUserData, setIsLoging, login,logout} = dataController(dispatch, getIsLoging)
+    
     if (isProductsLoading || loadingData) {
         return <Spinner />
     }
@@ -24,8 +24,10 @@ function ItemsContextProvider({ children }) {
     return (
         <ItemsContext.Provider value={{
             products,
+
             shoppingCart, userData, isLoging,
-            addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging
+            addToCart, removeFromCart, clearCart, setUserData, setIsLoging,
+            login, logout
         }}>
             {children}
         </ItemsContext.Provider>
@@ -36,8 +38,10 @@ const useStore = () => {
     const context = useContext(ItemsContext);
     const {
             products,
+
             shoppingCart, userData, isLoging,
-            addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging
+            addToCart, removeFromCart, clearCart, setUserData, setIsLoging,
+            login, logout
         } = context;
 
     if (!context) {
@@ -46,7 +50,8 @@ const useStore = () => {
     return {
             products,
             shoppingCart, userData, isLoging,
-            addToCart, removeFromCart, clearCart, setShoppingCart, setUserData, setIsLoging
+            addToCart, removeFromCart, clearCart, setUserData, setIsLoging,
+            login, logout
         };
 };
 

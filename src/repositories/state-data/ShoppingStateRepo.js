@@ -1,13 +1,17 @@
+import { CartItem } from "../../models/CartItem";
+
 class ShoppingStateRepo {
     constructor(dispatch) {
-        this.dispatch = dispatch;
+        this.dispatch = dispatch; 
     }
 
-    addToCart(product) {
-        this.dispatch({ type: 'ADD_TO_CART', payload: product });
+    addToCart(item) {
+        const cartItem = new CartItem(item)
+        this.dispatch({ type: 'ADD_TO_CART', payload: cartItem });
     }
 
     removeFromCart(productId) {
+        console.log('a borrar: ', productId)
         this.dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
     }
 

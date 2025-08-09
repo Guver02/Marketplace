@@ -1,36 +1,46 @@
 const express = require('express')
 const router = new express.Router()
 const {models} = require('../db/connec')
-const sequelize = require('../db/connec');
+const { authenticateToken } = require('../middlewares/authToken.middleware');
+const { PREVIOUS_PURCHASES_TABLE } = require('../db/models/previouspurchases.model');
+const { SHOPPING_CART_TABLE } = require('../db/models/shoppingcart.models');
+const { PRODUCTS_TABLE } = require('../db/models/products.models');
 
-router.post('/generate',async (req,res) =>{
-    const userid = 1
-    const {productsPurchases} = req.body
-    console.log('PRODUCTSARRAY',productsPurchases)
+router.post('/generate',
+    authenticateToken,
+    async (req,res) => {
+    const userId = req.user.id
 
-    const rsp = await models.previouspurchases.create({
-        userid: userid
+    const cart = await models[SHOPPING_CART_TABLE].findAll({
+        where: { userid: userId },
+        attributes: ['productid', 'quantity'],
+        include: {model: models.products,
+                    as: 'productInCart',
+                    attributes: ['product', 'price']}
     })
 
-    const productsPurchaseData = productsPurchases.map((elem) => {
-        return {
-            purchaseid: rsp.id,
-            productid: elem.id
-        }
-    }) 
+    const totalPrice = cart.reduce((acc, item) => {
+        return acc + (item.productInCart.price * item.quantity);
+    }, 0);
 
-    
-    const data = await models.productspurchase.bulkCreate(productsPurchaseData)
-    res.json(rsp)
+    const rsp = await models[PREVIOUS_PURCHASES_TABLE].create({
+        userid: userId
+    })
+
+    res.json({purchaseId: rsp.id, totalPrice})
 })
 
-router.post('/confirm/:purchaseid',async (req,res) =>{
-    const userid = 1
-    const {purchaseid} = req.params
+router.post('/onecheck', 
+    authenticateToken,
+    async (req,res) =>{
+        const userId = req.user.id
+        const {productId} = req.body
 
-    
+        const product = await models[PRODUCTS_TABLE].findByPk(productId)
+        const rsp = await models[PREVIOUS_PURCHASES_TABLE].create({
+        userid: userId})
 
-    res.json(rsp)
+        res.json({purchaseId: rsp.id, totalPrice: product.price})
 })
 
 

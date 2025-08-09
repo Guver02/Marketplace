@@ -1,5 +1,4 @@
-const {Sequelize ,DataTypes, Model} = require('sequelize')
-const {RECOMENDATIONSLEVEL_TABLE} = require('./recomendationslevel.models')
+const { DataTypes, Model } = require('sequelize')
 
 const PRODUCTS_TABLE = 'products'
 
@@ -10,7 +9,7 @@ const schemaProductsSeq = {
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER.UNSIGNED,
-        
+
     },
     product: {
         type: DataTypes.STRING,
@@ -18,13 +17,13 @@ const schemaProductsSeq = {
     },
     providerid: {
         type: DataTypes.INTEGER,
-        
+
         allowNull: false,
 
-        references:  {
+        references: {
             model: 'providers',
             key: 'id',
-          },
+        },
     },
     details: {
         type: DataTypes.TEXT,
@@ -44,16 +43,15 @@ const schemaProductsSeq = {
     },
     image: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        default: '',
     },
+}
 
-  }
+class Products extends Model {
 
-class Products  extends Model{
-
-    static associate(models)
-    {
-        this.belongsTo(models.providers,{
+    static associate(models) {
+        this.belongsTo(models.providers, {
             foreignKey: 'providerid',
             as: 'myProviders'
         })
@@ -61,20 +59,26 @@ class Products  extends Model{
         this.belongsToMany(models.categories, {
             through: models.productcategories,
             as: 'myCategories',
-          });
+        });
 
-          this.belongsToMany(models.colors, {
+        this.belongsToMany(models.colors, {
             through: models.productcolors,
             as: 'myColors',
-          });
+        });
+
+        this.hasMany(models.productimages, {
+            foreignKey: 'productid',
+            as: 'images',
+        });
+
     }
 
-    static config(sequelize){
-        return{
-            sequelize,//conneccion con sequelize
+    static config(sequelize) {
+        return {
+            sequelize,
             modelName: PRODUCTS_TABLE
         }
     }
-} 
+}
 
-module.exports = {PRODUCTS_TABLE ,Products, schemaProductsSeq}
+module.exports = { PRODUCTS_TABLE, Products, schemaProductsSeq }

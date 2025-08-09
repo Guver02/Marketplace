@@ -10,24 +10,31 @@ import { ModalProvider } from './providers/ModalContext';
 import { Login } from './auth-component/Login';
 import { Signup } from './auth-component/Signup';
 import { Layout } from './components/Layout'
-
+import { ImageUploadPanel } from './panel-components/ImageUploadPanel';
+import { Unauthorized } from './auth-component/Unauthorized'
+import { ProtectedRoute } from './auth-component/ProtectedRoute';
+import { UsersTable } from './admin-components/UsersTable';
 
 function App() {
 
     return (
         <ItemsContextProvider>
             <ModalProvider>
+                <Routes>
+                    <Route path='/' element={<Layout><Home/></Layout>}/>
+                    <Route path='/:id' element={<Layout><ProductPage/></Layout>} />
+                    <Route path='/categories/:id' element={<Layout><CategoryPage/></Layout>}/>
 
-         
-                    <Routes>
-                        <Route path='/' element={<Layout><Home/></Layout>} />
-                        <Route path='/:id' element={<Layout><ProductPage/></Layout>} />
-                        <Route path='/login' element={<Login/>} />
-                        <Route path='/signup' element={<Signup/>} /> 
-                        <Route path='/categories/:id' element={<Layout><CategoryPage/></Layout>} />
-                    </Routes>
+                    <Route path='/login' element={<Login />}/>
+                    <Route path='/signup' element={<Signup />}/>
 
-                
+                    <Route path='/unauthorized' element={<Unauthorized/>}/>
+                    
+                    <Route path='/seller' element={<ProtectedRoute arrRole={['seller']}><ImageUploadPanel/></ProtectedRoute>}/>
+
+                    <Route path='/admin' element={<UsersTable/>}/>
+
+                </Routes>
             </ModalProvider>
         </ItemsContextProvider>
     )

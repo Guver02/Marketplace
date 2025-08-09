@@ -1,0 +1,86 @@
+.panel {
+    border: 2px dashed #aaa;
+    border-radius: 12px;
+    padding: 24px;
+    background-color: #f9f9f9;
+    max-width: 650px;
+    margin: auto;
+    text-align: left;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.formGroup {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.formGroup input,
+.formGroup textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.previewContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.imageCard {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.imagePreview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.removeButton {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: rgba(255, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+}
+
+.submitButton {
+    background-color: #0070f3;
+    color: white;
+    padding: 14px 26px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.submitButton:hover {
+    background-color: #005bb5;
+}

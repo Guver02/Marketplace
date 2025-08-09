@@ -1,5 +1,7 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useShoppingCart } from "./useShoppingCart";
+import { useUserData } from "./useUserData";
+import { useLoging } from "./useLoging";
 
 const initialState = {
     shoppingCart: [],
@@ -16,14 +18,30 @@ const reducer = (state, action) => {
                 shoppingCart: action.payload
             }
         case 'ADD_TO_CART':
-            return {
+            const exist = state.shoppingCart.find(item => item.productid === action.payload.productid)
+
+            if(!exist) return {
                 ...state,
                 shoppingCart: [...state.shoppingCart, action.payload]
             }
+                return {
+                    ...state,
+                    shoppingCart: state.shoppingCart.map(item => {
+
+                        if(item.productid === action.payload.productid) {
+                            return ({
+                                ...item,
+                                quantity: item.quantity + action.payload.quantity
+                            })
+                        }
+                        return item
+                    })
+                }
+            
         case 'REMOVE_FROM_CART':
             return {
                 ...state,
-                shoppingCart: state.shoppingCart.filter(item => item.productId !== action.payload)
+                shoppingCart: state.shoppingCart.filter(item => item.productid !== action.payload)
             }
         case 'CLEAR_CART':
             return {
@@ -38,7 +56,7 @@ const reducer = (state, action) => {
         case 'SET_IS_LOGING':
             return {
                 ...state,
-                isLoging: true
+                isLoging: action.payload
             }
         default:
             return state
@@ -47,19 +65,33 @@ const reducer = (state, action) => {
 
 function useData () {
     const [state, dispatch] = useReducer( reducer, initialState )
+    const [loading, setLoading] = useState(true)
 
-    const setIsLoging = (boolValue) => {
-        dispatch({type: 'SET_IS_LOGING', payload: boolValue})
-    }
+    const [isLoging, loadIsLogging] = useLoging()
+    const [shoppingCart, loadCart] = useShoppingCart()
+    const [userData, loadUser] = useUserData()
 
-    const [shoppingCart, loadCart] = useShoppingCart({setIsLoging})
+
+    useEffect(() => {
+        dispatch({type: 'SET_IS_LOGING', payload: isLoging})
+    }, [isLoging])
 
     useEffect(() => {
         dispatch({type: 'SET_SHOPPING_CART', payload: shoppingCart})
-
     }, [shoppingCart])
 
-    return [state, dispatch, loadCart]
+    useEffect(() => {
+        dispatch({type: 'SET_USER_DATA', payload: userData})
+    }, [userData])
+
+    
+    useEffect(() => {
+        if (!loadCart && !loadUser && !loadIsLogging) setLoading(false)
+    }, [loadCart, loadUser])
+
+    console.log(isLoging)
+
+    return [state, dispatch, loading]
 }
 
 export {useData}

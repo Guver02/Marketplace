@@ -4,6 +4,9 @@
     font-weight: bold;
     font-size: 32px;
 }
+.logo:hover{
+    cursor: pointer;
+}
 a{
     all: unset;
 }

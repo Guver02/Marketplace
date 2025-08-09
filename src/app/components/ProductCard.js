@@ -19,8 +19,6 @@ const ProductCard = ({ product }) => {
             productId : product.id,
             quantity : 1,
             })
-
-        console.log('Agregado')
     }
 
     return (
@@ -28,7 +26,7 @@ const ProductCard = ({ product }) => {
             onClick={handleProduct}>
 
             <div className={styles.imageContainer}>
-                <img src={product.image} alt={product.product} className={styles.image} />
+                <img src={product.images[0].imageurl} alt={product.product} className={styles.image} />
             </div>
 
             <div className={styles.info}>

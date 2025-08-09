@@ -1,103 +1,84 @@
 const express = require('express')
 const router = new express.Router()
 const axios = require('axios')
-const request = require('request')
-const {models} = require('../db/connec')
-const sequelize = require('../db/connec');
 
-const CLIENT = 'AX3_84srcfam64NkthR-XfJpcAbAxsaSl0Evgp9v1VVXqUAEj4iVKuh6mZM5I4GZl9O9YcZQL8idO_GG';
-const SECRET = 'ECvyuk20kjDYNLXOU0CftWyzNONNGxbuNOVWOCm14XlxuEmBynX-SiKw9BOkuadT1NrxT__rdYfOEHh5';
-const PAYPAL_API = 'https://api-m.sandbox.paypal.com'; // Live https://api-m.paypal.com
+const HOST = 'http://localhost:3200/api/v1/checkouts'
+const paypalApi = {
+    paypalSandbox: 'https://api-m.sandbox.paypal.com',
+    paypalLive: 'https://api-m.paypal.com',
+}
+const env = {
+    marketplace: {
+        paypalClient: 'AeUsKNGKWk-9Gm_Y9nrv4pWQl1Xl-Rial3IHQt-EMw1MVnLAbwCQNW35adrWaNpaJ87T60uqB6lqkKNR',
+        paypalSecret: 'EJ5fMK4NksmYzXrRqdlepbhar18HYH2-KLo8LoK-zYlB2NgCKTr1_OeLrW5ErsQXJss3r9g8SffxcDme'
+    }
+}
 
-const auth = { user: CLIENT, pass: SECRET }
+router.post('/create-payment', async (req, res) => {
+    const { price, purchaseid } = req.body
+    console.log('BODY', req.body)
+    const priceStr = price.toString()
 
-router.post('/create-payment',async (req,res) =>{
-    
-    const {price, purchaseid} = req.body
-    console.log(price, purchaseid)
-
-    const priestr = price.toString()
-    const body = {
+    const order = {
         intent: 'CAPTURE',
         purchase_units: [{
             amount: {
-                currency_code: 'USD', //https://developer.paypal.com/docs/api/reference/currency-codes/
-                value: priestr
+                currency_code: 'USD',
+                value: priceStr
             }
         }],
         application_context: {
             brand_name: `MiTienda.com`,
-            landing_page: 'NO_PREFERENCE', // Default, para mas informacion https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context
-            user_action: 'PAY_NOW', // Accion para que en paypal muestre el monto del pago
-            return_url: `http://localhost:3100/api/v1/checkouts/execute-payment/${purchaseid}`, // Url despues de realizar el pago
-            cancel_url: `http://localhost:3100/cancel-payment` // Url despues de realizar el pago
+            landing_page: 'NO_PREFERENCE',
+            user_action: 'PAY_NOW',
+            return_url: `${HOST}/execute-payment/${purchaseid}`,
+            cancel_url: `${HOST}/cancel-payment`
         }
     }
-    //https://api-m.sandbox.paypal.com/v2/checkout/orders [POST]
 
-    request.post(`${PAYPAL_API}/v2/checkout/orders`, {
-        auth,
-        body,
-        json: true
-    }, (err, response) => {
+    const params = new URLSearchParams();
+    params.append('grant_type', 'client_credentials');
 
-        if(err){
-            console.log(err)
+    const { data: { access_token } } = await axios.post(`${paypalApi.paypalSandbox}/v1/oauth2/token`, params, {
+        auth: {
+            username: env.marketplace.paypalClient,
+            password: env.marketplace.paypalSecret
         }
-        const data = response.body
-
-        console.log(response.body)
-
-        res.json(response.body.links[1])
+    })
+    const resp = await axios.post(`${paypalApi.paypalSandbox}/v2/checkout/orders`, order, {
+        headers: {
+            Authorization: `Bearer ${access_token}`
+        }
     })
 
+    res.json({ href: resp.data.links[1].href })
 })
 
-router.get('/execute-payment/:purchaseid', (req, res) => {
-    const {purchaseid} = req.params
-    const userid = 1
-    const token = req.query.token; //<-----------
-    console.log(req)
-    request.post(`${PAYPAL_API}/v2/checkout/orders/${token}/capture`, {
-        auth,
-        body: {},
-        json: true
-    }, async (err, response) => {
-        
-        console.log('PARECE QUE FUNCIONO', response.body)
-        
-        //crear la orden
-
-        const purchaseItem = await models.previouspurchases.findByPk(purchaseid)
-    const rsp = await purchaseItem.update({
-        completed: true
-    })
-
-    const products = await models.productspurchase.findAll({
-        where: {
-            purchaseid: purchaseid
+router.get('/execute-payment/:purchaseid', async (req, res) => {
+    const { token } = req.query;
+    console.log('EXECUTE TOKEN: ',token)
+    const response = await axios.post(
+        `${paypalApi.paypalSandbox}/v2/checkout/orders/${token}/capture`,
+        {},
+        {
+            auth: {
+                username: env.marketplace.paypalClient,
+                password: env.marketplace.paypalSecret,
+            },
         }
-    })
+    );
 
-    const plainProducts = products.map((product) => {
-        return product.toJSON()
-    })
+    console.log(response.data);
 
-    const ordersData = plainProducts.map((elem) => {
-        return {
-            userid: userid,
-            productid: elem.productid
-        }
-    })
+    res.send('Pago exitoso');
 
-    await models.orders.bulkCreate(ordersData)
+});
 
-        //
+router.get('/cancel-payment', (req, res) => {
+    res.send('Pago cancelado');
+});
 
-        res.redirect('http://localhost:3100')
-    })
 
-})
 
 
 module.exports = router 

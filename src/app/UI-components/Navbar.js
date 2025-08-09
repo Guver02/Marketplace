@@ -1,10 +1,13 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './Navbar.css'
 import {ShoppingBag} from "lucide-react"
 import {useModal} from "../providers/ModalContext"
 import {ShoppingCart} from "../components/ShoppingCart"
 import { useStore } from "../providers/ItemsContex";
+import { Wishlist } from "../wishlist-components/Wishlist";
+import { SearchPanel } from "../search-components/SearchPanel";
+import { UserProfile } from "./UserProfile";
 
 function Navbar() {
     const {openModal} = useModal()
@@ -15,7 +18,17 @@ function Navbar() {
         openModal(<ShoppingCart/>)
     }    
 
-    console.log(shoppingCart)
+    const handleWishlist = () => {
+        openModal(<Wishlist/>)
+    }
+
+    const handleSearch = () => {
+        openModal(<SearchPanel/>)
+    }
+
+    const handleUser = () => {
+        openModal(<UserProfile/>)
+    }
 
     return (
         <nav className="navContainer">
@@ -26,13 +39,16 @@ function Navbar() {
 
             <div className="options">
                 <span className="item">MORE</span>
-                <span className="item">WISHLIST</span>
-                <span className="item">SEARCH</span>
+                <span className="item"
+                onClick={handleWishlist}>WISHLIST</span>
+                <span className="item"
+                onClick={handleSearch}>SEARCH</span>
             </div>
 
             <div className="rightOptions">
                 {isLoging ?
-                    <span className="item">ACCOUNT</span>
+                    <span className="item"
+                    onClick={handleUser}>ACCOUNT</span>
                     :
                     <button className="login-button"
                     onClick={() => navigate('/login')}>Iniciar Sesion</button>

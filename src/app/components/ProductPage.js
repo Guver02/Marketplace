@@ -2,80 +2,62 @@ import React, { useEffect, useState } from 'react';
 import styles from './ProductPage.module.css';
 import { useParams } from 'react-router';
 import {InputWithMessages} from './InputWithMessages'
+import {useStore} from '../providers/ItemsContex'
 
 const ProductPage = () => {
     const [tab, setTab] = useState('description');
-
-
     const [product, setProduct] = useState(null)
-
+    const {addToCart} = useStore()
     const { id } = useParams()
 
     useEffect(() => {
-
         fetch(`/api/v1/products/${id}`)
             .then(res => res.json())
             .then((resParsed) => {
-                console.log(resParsed)
                 setProduct(resParsed)
             })
 
     }, [id])
 
-    const handleBuyNow = async (item) => {
-
-        try {
-            const purchaseResponse = await fetch('api/v1/previous-purchase/generate', {
-                method: 'POST',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    productsPurchases: [item]
-                })
-            })
-            const purchaseData = await purchaseResponse.json()
-
-            const res = await fetch('/api/v1/checkouts/create-payment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    price: item.price,
-                    purchaseid: purchaseData.id
-                }),
-
-            })
-            const data = await res.json()
-            console.log(data.href)
-            window.location.replace(data.href);
-        } catch (error) {
-            console.log(error);
-        }
-
+    const handleAddToCart = () => {
+        addToCart({
+            productId : id,
+            quantity : 1,
+        })
     }
 
-    const addToCart = (item) => {
-        alert('agregado al carrito :D')
+    const handleBuyNow = async () => {
+        
+        const prevPurchase = await fetch('api/v1/previous-purchase/onecheck',{
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+              },
+            credentials: 'include',
+            body: JSON.stringify({
+                productId: id
+            })
+        })
 
-        if (localStorage.getItem('myCartItems') === null) {
-            console.log('Creando')
-            localStorage.setItem('myCartItems', '[]');
-        }
+        const {purchaseId, totalPrice} = await prevPurchase.json()
+        console.log(purchaseId, totalPrice)
 
+        const res = await fetch('/api/v1/checkouts/create-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                price: totalPrice.toFixed(2),
+                purchaseid: purchaseId
+            }),
 
-        const myString = localStorage.getItem('myCartItems')
-        console.log('string', myString)
-        const myItems = JSON.parse(myString)
+        })
 
-        console.log('array', myItems)
-        myItems.push(item)
-        const myNewString = JSON.stringify(myItems)
-
-        localStorage.setItem('myCartItems', myNewString)
-
+        const data = await res.json()
+        console.log(data)
+        window.location.replace(data.href);
     }
 
     if (!product) return <></>
@@ -123,8 +105,10 @@ const ProductPage = () => {
 
 
                     <div className={styles.actions}>
-                        <button className={styles.addToCart}>Add To Cart</button>
-                        <button className={styles.buyNow}>Buy Now</button>
+                        <button className={styles.addToCart}
+                        onClick={handleAddToCart}>Add To Cart</button>
+                        <button className={styles.buyNow}
+                        onClick={handleBuyNow}>Buy Now</button>
                     </div>
 
 

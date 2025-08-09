@@ -1,20 +1,52 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './ShoppingCart.module.css'
-import { ItemsContext, useStore } from '../providers/ItemsContex';
+import { useStore } from '../providers/ItemsContex';
 import { ItemCart } from './ItemCart';
 import { Spinner } from '../assets/Spinner';
-
-async function getPurchase () {
-    alert('Compra realizada')
-}
 
 function ShoppingCart() {
     const [items, setItems] = useState(null)
     const { shoppingCart, isLoging } = useStore()
+
+    const getPurchase = async () => {
+        /* await fetch('api/v1/shoppingcart/clear', {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        }) */
+
+        const purchaseResponse = await fetch('api/v1/previous-purchase/generate', {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        })
+        
+        const {purchaseId, totalPrice} = await purchaseResponse.json()
+        console.log(purchaseId, totalPrice)
+
+        const res = await fetch('/api/v1/checkouts/create-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                price: totalPrice.toFixed(2),
+                purchaseid: purchaseId
+            }),
+
+        })
+
+        const data = await res.json()
+        window.location.replace(data.href);
+    }
     
     const getProducts = async () => {
         const ids = shoppingCart.map((elem) => {
-            return elem.productId
+            return elem.productid
         })
 
         const res = await fetch('api/v1/products/by-ids', {
@@ -34,15 +66,15 @@ function ShoppingCart() {
     useEffect(() => {
         const fetchProducts = async () => {
             const products = await getProducts()
-            
+
             const data = shoppingCart.map((elem) => ({
                 ...elem,
-                ...products[elem.productId]
+                productData: products[elem.productid]
             }))
-
+   
             setItems(data)
         }
-
+        
         fetchProducts()
     }, [shoppingCart])
 
@@ -57,7 +89,7 @@ function ShoppingCart() {
         <div className={styles.shoppingCartContainer}>
             <div>
                 {items.map((elem) => {
-                    return <ItemCart key={elem.id} item={elem} />
+                    return <ItemCart key={elem.productData.id} item={elem} />
                 })}
             </div>
 
@@ -70,44 +102,5 @@ function ShoppingCart() {
 export { ShoppingCart }
 
 /**
- * await fetch('api/v1/shoppingcart/clear', {
-            method: 'POST',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        })
-
-        const purchaseResponse = await fetch('api/v1/previous-purchase/generate', {
-            method: 'POST',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                productsPurchases: shoppingCart
-            })
-        })
-        const purchaseData = await purchaseResponse.json()
-
-        let price = 0
-        shoppingCart.map((elem) => {
-            price = price + elem.price
-            console.log(price)
-        })
-
-        const res = await fetch('/api/v1/checkouts/create-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                price: price.toFixed(2),
-                purchaseid: purchaseData.id
-            }),
-
-        })
-
-        const data = await res.json()
-        window.location.replace(data.href);
+ * 
  */

@@ -4,7 +4,7 @@ import { Recomendation } from "./Recomendation";
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ItemsContext } from '../providers/ItemsContex';
 import { SliderCategories } from './SliderCategories';
-import { animateScrollTo } from '../utils/UtilFunctions';
+import { animateScrollTo } from '../../utils/UtilFunctions';
 import { useIntersection } from '../custom-hooks/useIntersection';
 import { DetailsCard } from './DetailsCard';
 import ProductInformation from './ProductInformation';
@@ -12,7 +12,7 @@ import ProductInformation from './ProductInformation';
 function Home() {
     const { products } = useContext(ItemsContext)
     const data = products[0]
-    const scrollPoint = window.innerHeight - (window.innerHeight / 100) * 7;
+    const scrollPoint = window.innerHeight - (window.innerHeight / 100) * 7 - 8;
 
     const [downIsIntersecting, setDownIsIntersecting] = useState(false)
 
@@ -24,6 +24,11 @@ function Home() {
         threshold: 0.1 //el 10% del elemento
     })
 
+    const [sliderElem, sliderIsIntersecting] = useIntersection({
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.01 //el 1% del elemento
+    })
 
     useEffect(() => {
         if (downIsIntersecting) animateScrollTo(scrollPoint, principalContainer)
@@ -37,6 +42,10 @@ function Home() {
             }, 800)
         }
     }, [bannerIsIntersecting])
+
+    useEffect(() => {
+        if (sliderIsIntersecting) setDownIsIntersecting(true)
+    }, [sliderIsIntersecting])
 
     return (
         <div className={styles.container}
@@ -55,17 +64,19 @@ function Home() {
                     </div>
 
                     <div className={styles.productInfo}>
-                        <ProductInformation/>
+                        <ProductInformation />
                         <DetailsCard downIsIntersecting={downIsIntersecting} />
                     </div>
 
                 </div>
             </div>
 
+            <div ref={sliderElem}>
+                <SliderCategories setIsIntersecting={setDownIsIntersecting} />
+                <Information />
+                <Recomendation />
+            </div>
 
-            <SliderCategories setIsIntersecting={setDownIsIntersecting} />
-            <Information />
-            <Recomendation />
         </div>
     );
 }

@@ -8,6 +8,7 @@ const routerOrders = require('./orders.router')
 const routerPreviousPurchase = require('./previouspurchases.router')
 const routerCategories = require('./categories.router')
 const routerAuth = require('./auth.router')
+const routerUsers = require('./users.router')
 const express = require('express')
 //const router = require('./auth.router')
 
@@ -23,6 +24,7 @@ function routerApi (app){
     routerv1.use('/categories', routerCategories)
 
     routerv1.use('/auth', routerAuth)
+    routerv1.use('/users', routerUsers)
     routerv1.use('/shoppingcart', routerShoppingcart)
     
     app.use('/api/v1',routerv1)

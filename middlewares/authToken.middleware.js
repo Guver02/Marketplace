@@ -16,7 +16,10 @@ function authenticateToken (req, res, next){
 
         req.user = {
             id: decoded.id,
+            role: decoded.role
         }
+
+        console.log(decoded)
         next()
     } catch (error) {
         res.status(403).json({

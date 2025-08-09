@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 import { useNavigate } from 'react-router';
+import { useStore } from '../providers/ItemsContex';
 
 const Login = () => {
     const [form, setForm] = useState({ email: '', password: '' });
-    const navigate = useNavigate()
-
-    const onSubmit = async () => {
-        const res = await fetch('/api/v1/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(form)
-        })
-
-        if(res.status == 200) navigate('/')
-    }
+    const {login} = useStore()
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,7 +13,7 @@ const Login = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        await onSubmit(form);
+        await login(form)
     };
 
     return (

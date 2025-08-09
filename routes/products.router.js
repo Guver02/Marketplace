@@ -2,12 +2,17 @@ const express = require('express')
 const router = new express.Router()
 const { models } = require('../db/connec')
 const sequelize = require('../db/connec');
+const {authenticateToken} = require('../middlewares/authToken.middleware')
 const { PRODUCTS_TABLE } = require('../db/models/products.models');
+const { authorizationRole } = require('../middlewares/authorizationRole.middleware');
+const { PRODUCT_IMAGES_TABLE } = require('../db/models/productimages.models');
 
 router.get('/', async (req, res) => {
-    const rsp = await models.products.findAll()
+    const products = await models.products.findAll({
+        include: ['images']
+    })
 
-    res.json(rsp)
+    res.json(products)
 })
 
 router.get('/:id', async (req, res) => {
@@ -16,14 +21,11 @@ router.get('/:id', async (req, res) => {
         include: ['myColors']
     })
 
-
-
     res.json(rsp)
 })
 
 router.post('/by-ids', async (req, res) => {
     const { ids } = req.body
-
     if (!Array.isArray(ids) || ids.length === 0) {
         return res.status(400).json({
                 error: true,
@@ -35,15 +37,38 @@ router.post('/by-ids', async (req, res) => {
         where: {
             id: ids
         },
-        attributes: ['id', 'product', 'price', 'image']
+        attributes: ['id', 'product', 'price', 'image'],
+        include: ['images']
     })
 
-    const productsById = rsp.reduce((acc, product) => {
+    const productsPlain = rsp.map(product => product.get({ plain: true }));
+
+    const productsById = productsPlain.reduce((acc, product) => {
             acc[product.id] = product;
             return acc;
         }, {});
 
     res.json(productsById)
+})
+
+router.post('/create', 
+    authenticateToken,
+    authorizationRole('seller'),
+    async (req, res) => {
+        const {product, urlImages} = req.body
+
+        const productCreated = await models[PRODUCTS_TABLE].create({...product, providerid: req.user.id, image: '', rating: 0})
+      
+        const productImages = urlImages.map((url) => {
+            return {
+                productid: productCreated.id,
+                imageurl: url
+            }
+        })
+
+        await models[PRODUCT_IMAGES_TABLE].bulkCreate(productImages)
+        
+        res.json(productCreated)
 })
 
 router.get('/light/:id', async (req, res) => {

@@ -23,11 +23,9 @@ function CategoryPage () {
       
     }, [id])
 
-    return (<>
-        <Navbar/>
-        <SliderCategories/>
+    return (
         <ProductsGalery values={{data}}/>
-    </>
+    
     );
   }
 
