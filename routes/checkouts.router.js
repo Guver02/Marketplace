@@ -15,6 +15,8 @@ const env = {
 }
 
 router.post('/create-payment', async (req, res) => {
+    const clientOrigin = req.get('x-client-origin')
+    console.log(clientOrigin)
     const { price, purchaseid } = req.body
     console.log('BODY', req.body)
     const priceStr = price.toString()
@@ -31,8 +33,8 @@ router.post('/create-payment', async (req, res) => {
             brand_name: `MiTienda.com`,
             landing_page: 'NO_PREFERENCE',
             user_action: 'PAY_NOW',
-            return_url: `${HOST}/execute-payment/${purchaseid}`,
-            cancel_url: `${HOST}/cancel-payment`
+            return_url: `${HOST}/execute-payment/${purchaseid}?clientOrigin=${clientOrigin}`,
+            cancel_url: `${HOST}/cancel-payment/${purchaseid}?clientOrigin=${clientOrigin}`
         }
     }
 
@@ -55,8 +57,8 @@ router.post('/create-payment', async (req, res) => {
 })
 
 router.get('/execute-payment/:purchaseid', async (req, res) => {
-    const { token } = req.query;
-    console.log('EXECUTE TOKEN: ',token)
+    const { token, clientOrigin } = req.query;
+   
     const response = await axios.post(
         `${paypalApi.paypalSandbox}/v2/checkout/orders/${token}/capture`,
         {},
@@ -70,12 +72,12 @@ router.get('/execute-payment/:purchaseid', async (req, res) => {
 
     console.log(response.data);
 
-    res.send('Pago exitoso');
-
+    res.redirect(`${clientOrigin}/#/success/26`);
 });
 
-router.get('/cancel-payment', (req, res) => {
-    res.send('Pago cancelado');
+router.get('/cancel-payment/:purchaseid', (req, res) => {
+    const { clientOrigin } = req.query;
+    res.redirect(`${clientOrigin}/#/cancel`);
 });
 
 

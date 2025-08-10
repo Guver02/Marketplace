@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params
     const rsp = await models.products.findByPk(id, {
-        include: ['myColors']
+        include: ['images']
     })
 
     res.json(rsp)

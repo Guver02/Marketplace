@@ -3,11 +3,14 @@ import styles from './ProductPage.module.css';
 import { useParams } from 'react-router';
 import {InputWithMessages} from './InputWithMessages'
 import {useStore} from '../providers/ItemsContex'
+import { useModal } from '../providers/ModalContext';
+import { LoadingPurchase } from '../assets/LoadingPurchase';
 
 const ProductPage = () => {
     const [tab, setTab] = useState('description');
     const [product, setProduct] = useState(null)
     const {addToCart, shopOneProduct} = useStore()
+    const {openModal} = useModal()
     const { id } = useParams()
 
     useEffect(() => {
@@ -27,7 +30,8 @@ const ProductPage = () => {
     }
 
     const handleBuyNow = async () => {
-        shopOneProduct(id)
+        openModal(<LoadingPurchase/>)
+        await shopOneProduct(id)
     }
 
     if (!product) return <></>
@@ -37,7 +41,7 @@ const ProductPage = () => {
             <div className={styles.container}>
 
                 <div className={styles.imageSection}>
-                    <img src={product.image} alt={product.product} className={styles.mainImage} />
+                    <img src={product.images[0].imageurl} alt={product.product} className={styles.mainImage} />
                     <div className={styles.thumbnails}>
                         {[1, 2, 3, 4].map((i) => (
                             <img key={i} src={product.image} alt={`thumb-${i}`} className={styles.thumb} />

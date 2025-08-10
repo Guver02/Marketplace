@@ -14,6 +14,8 @@ import { ImageUploadPanel } from './panel-components/ImageUploadPanel';
 import { Unauthorized } from './auth-component/Unauthorized'
 import { ProtectedRoute } from './auth-component/ProtectedRoute';
 import { UsersTable } from './admin-components/UsersTable';
+import { PaymentSuccess } from './shop-pages/PaymentSuccess';
+import { PaymentCancelled } from './shop-pages/PaymentCancelled';
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
                     <Route path='/signup' element={<Signup />}/>
 
                     <Route path='/unauthorized' element={<Unauthorized/>}/>
+                    <Route path='/success/:id' element={<PaymentSuccess/>}/>
+                    <Route path='/cancel' element={<PaymentCancelled/>}/>
                     
                     <Route path='/seller' element={<ProtectedRoute arrRole={['seller']}><ImageUploadPanel/></ProtectedRoute>}/>
 

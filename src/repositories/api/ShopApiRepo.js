@@ -21,7 +21,8 @@ class ShopApiRepo {
         const res = await fetch('/api/v1/checkouts/create-payment', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-client-origin': window.location.origin
             },
             body: JSON.stringify({
                 price: totalPrice.toFixed(2),
