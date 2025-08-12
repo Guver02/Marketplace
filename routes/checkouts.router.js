@@ -2,23 +2,13 @@ const express = require('express')
 const router = new express.Router()
 const axios = require('axios')
 
-const HOST = 'http://localhost:3200/api/v1/checkouts'
-const paypalApi = {
-    paypalSandbox: 'https://api-m.sandbox.paypal.com',
-    paypalLive: 'https://api-m.paypal.com',
-}
-const env = {
-    marketplace: {
-        paypalClient: 'AeUsKNGKWk-9Gm_Y9nrv4pWQl1Xl-Rial3IHQt-EMw1MVnLAbwCQNW35adrWaNpaJ87T60uqB6lqkKNR',
-        paypalSecret: 'EJ5fMK4NksmYzXrRqdlepbhar18HYH2-KLo8LoK-zYlB2NgCKTr1_OeLrW5ErsQXJss3r9g8SffxcDme'
-    }
-}
+
 
 router.post('/create-payment', async (req, res) => {
     const clientOrigin = req.get('x-client-origin')
-    console.log(clientOrigin)
+    
     const { price, purchaseid } = req.body
-    console.log('BODY', req.body)
+    
     const priceStr = price.toString()
 
     const order = {

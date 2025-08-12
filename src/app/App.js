@@ -16,6 +16,7 @@ import { ProtectedRoute } from './auth-component/ProtectedRoute';
 import { UsersTable } from './admin-components/UsersTable';
 import { PaymentSuccess } from './shop-pages/PaymentSuccess';
 import { PaymentCancelled } from './shop-pages/PaymentCancelled';
+import { SellerDashboard } from './panel-components/SellerDashboard';
 
 function App() {
 
@@ -34,7 +35,7 @@ function App() {
                     <Route path='/success/:id' element={<PaymentSuccess/>}/>
                     <Route path='/cancel' element={<PaymentCancelled/>}/>
                     
-                    <Route path='/seller' element={<ProtectedRoute arrRole={['seller']}><ImageUploadPanel/></ProtectedRoute>}/>
+                    <Route path='/seller' element={<ProtectedRoute arrRole={['seller']}><SellerDashboard/></ProtectedRoute>}/>
 
                     <Route path='/admin' element={<UsersTable/>}/>
 
