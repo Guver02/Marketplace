@@ -1,18 +1,25 @@
 // ModalContext.js
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import styles from "./Modal.module.css";
 
 const ModalContext = createContext();
 
 const ModalProvider = ({ children }) => {
     const [modalContent, setModalContent] = useState(null);
+    const [modalView, setModalView] = useState(false)
 
     const openModal = (content) => {
         setModalContent(content);
+        setTimeout(() => {
+            setModalView(true)
+        }, 50);
     };
 
     const closeModal = () => {
-        setModalContent(null);
+        setModalView(false)
+        setTimeout(() => {
+            setModalContent(null)
+        }, 500);
     };
 
     return (
@@ -20,7 +27,7 @@ const ModalProvider = ({ children }) => {
             {children}
             {modalContent && (
                 <div className={styles.overlay} onClick={closeModal}>
-                    <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+                    <div className={`${styles.modal} ${modalView ? styles.showModal : ''}`} onClick={(e) => e.stopPropagation()}>
                         {modalContent}
                     </div>
                 </div>

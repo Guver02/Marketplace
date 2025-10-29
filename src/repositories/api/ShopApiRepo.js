@@ -1,45 +1,50 @@
 class ShopApiRepo {
-    
+
     async shopOne(id) {
         try {
-            const prevPurchase = await fetch('api/v1/previous-purchase/onecheck',{
-            method: 'POST',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-              },
-            credentials: 'include',
-            body: JSON.stringify({
-                productId: id
+            const res = await fetch('api/v1/purchase/product', {
+                method: 'POST',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    'x-client-origin': window.location.origin
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    productId: id
+                })
             })
-        })
 
-        if(prevPurchase.error) throw prevPurchase.error
+            const data = await res.json()
+            if (data.error) throw data.error
 
-        const {purchaseId, totalPrice} = await prevPurchase.json()
+            return data
 
-        const res = await fetch('/api/v1/checkouts/create-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-client-origin': window.location.origin
-            },
-            body: JSON.stringify({
-                price: totalPrice.toFixed(2),
-                purchaseid: purchaseId
-            }),
+        } catch (error) {
+            throw error
+        }
+    }
 
-        })
+    async shopCart() {
+        try {
+            const res = await fetch('api/v1/purchase/cart', {
+                method: 'POST',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    'x-client-origin': window.location.origin,
+                },
+                credentials: 'include'
+            })
 
-        const data = await res.json()
-        if(data.error) throw data.error
-        
-        return data
+            const data = await res.json()
+            if (data.error) throw data.error
 
+            return data
         } catch (error) {
             throw error
         }
     }
 }
 
-export {ShopApiRepo}
+export { ShopApiRepo }

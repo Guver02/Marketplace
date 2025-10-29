@@ -1,0 +1,94 @@
+.combo {
+    display: flex;
+    max-width: 1400px;
+    width: 92%;
+    max-height: 480px;
+    margin: 80px auto;
+    box-sizing: border-box;
+}
+
+.leftPanel {
+    background-color: #7a8c7b;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 40%;
+    text-align: center;
+}
+
+.heading {
+    font-family: serif;
+    font-size: 2rem;
+    font-weight: normal;
+    line-height: 1.2;
+}
+
+.headingLine {
+    display: block;
+}
+
+.rightPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    width: 60%;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    position: relative;
+}
+
+.image {
+    max-width: 40%;
+    max-height: 140px;
+    height: 100%;
+    object-fit: contain;
+    margin-right: 20px;
+    border-radius: 4px;
+}
+
+.info {
+    flex-grow: 1;
+}
+.buyButton {
+    padding: 12px 20px;
+    background-color: rgb(255, 216, 20);
+    color: #000;
+    border: none;
+    border-radius: 6px 0 0 0;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transition: background-color 0.3s;
+}
+
+.buyButton:hover {
+    background-color: rgba(255, 216, 20, 0.9);
+}
+
+.productName {
+    font-size: 1rem;
+    color: #333;
+    margin: 0 0 5px 0;
+}
+
+.productPrice {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+}

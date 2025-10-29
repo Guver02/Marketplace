@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 const HOST = 'http://localhost:3200/api/v1/checkouts'
 const paypalApi = {
     paypalSandbox: 'https://api-m.sandbox.paypal.com',
@@ -52,10 +54,10 @@ class PaypalService {
             return { href: approveLink.href };
 
         } catch (error) {
-            console.error('Error al crear la orden de PayPal', err.response?.data || err.message);
+            console.error(error.response?.data || error.message);
             throw new Error('No se pudo iniciar el checkout de PayPal');
         }
     }
 }
 
-export { PaypalService }
+module.exports = {PaypalService}

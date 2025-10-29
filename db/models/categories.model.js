@@ -1,4 +1,5 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
+const { PRODUCT_CATEGORIES_TABLE } = require('./productcategories.model');
 
 const CATEGORIES_TABLE = 'categories';
 
@@ -19,7 +20,7 @@ const schemaCategoriesSeq = {
 class Categories extends Model {
   static associate(models) {
     this.belongsToMany(models.products, {
-      through: models.productcategories,
+      through: models[PRODUCT_CATEGORIES_TABLE],
       as: 'myProduct',
     });
   }

@@ -30,7 +30,8 @@
     "react-router": "^6.4.3",
     "react-router-dom": "^6.4.3",
     "request": "^2.88.2",
-    "sequelize": "^6.25.3",
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3",
     "socket.io": "^4.5.4",
     "web-push": "^3.5.0"
   },

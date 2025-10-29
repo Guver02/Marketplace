@@ -8,13 +8,19 @@
     transition: transform 0.2s ease;
     height: fit-content;
     font-family: "Quicksand", sans-serif;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
 .card:hover {
     cursor: pointer;
     transform: translateY(-4px);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+.showCard {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .imageContainer {

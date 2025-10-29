@@ -123,7 +123,19 @@ const dataController = (dispatchState, getIsLoging) => {
             console.error('Error en shopOneProducts:', error);
             showErrors?.(error);
         }
-        
+    }
+
+    async function shopShoppingCart(showErrors) {
+        try{
+            const data = await shopApiRepo.shopCart()
+            if(data.error) throw data.error
+            const href = data.href
+            window.location.href = href
+            
+        }catch(error){
+            console.error('Error en shopOneProducts:', error);
+            showErrors?.(error);
+        }
     }
 
     return {
@@ -133,6 +145,7 @@ const dataController = (dispatchState, getIsLoging) => {
         setUserData,
         setIsLoging,
         shopOneProduct,
+        shopShoppingCart,
         login,
         logout
     };

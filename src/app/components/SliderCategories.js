@@ -1,31 +1,61 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./SliderCategories.css";
+import React, { useEffect, useState } from "react";
+import styles from "./SliderCategories.module.css";
 import { Link } from "react-router-dom";
-import { useIntersection } from "../custom-hooks/useIntersection";
+import {
+    Shirt,
+    Tv,
+    Sofa,
+    ShoppingBag,
+    Watch,
+    Home,
+    Dumbbell,
+    BookOpen,
+    Puzzle,
+    Box,
+    CircleQuestionMark,
+} from "lucide-react";
+
+const categoryIcons = {
+    Clothes: Shirt,
+    Electronics: Tv,
+    Furniture: Sofa,
+    Shoes: ShoppingBag,
+    Accessories: Watch,
+    Home: Home,
+    Sports: Dumbbell,
+    Books: BookOpen,
+    Toys: Puzzle,
+    Other: Box,
+    Undefined: CircleQuestionMark
+};
 
 function SliderCategories() {
-    const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState([]);
 
     const getCategories = async () => {
-        const res = await fetch(`api/v1/categories/all`)
-        const data = await res.json()
-        setCategories(data)
-    }
+        const res = await fetch(`api/v1/categories/all`);
+        const data = await res.json();
+        setCategories(data);
+    };
 
     useEffect(() => {
-        getCategories()
-    }, [])
-    
+        getCategories();
+    }, []);
+
     return (
-        <div className="slider-container">
-            <div className="slider">
-                {categories.map((category, index) => (
-                    <Link key={index} to={`/categories/${category.id}`}>
-                        <div className="category">
+        <div className={styles.sliderContainer}>
+            <div className={styles.slider}>
+                {categories.map((category, index) => {
+
+                    const IconComponent = categoryIcons[category.category] || categoryIcons.Undefined;
+
+                    return(<Link key={index} to={`/categories/${category.id}`}>
+                        <div className={styles.category}>
+                            <IconComponent fill="#ccc" stroke="#000"/>
                             {category.category}
                         </div>
-                    </Link>
-                ))}
+                    </Link>)
+                })}
             </div>
         </div>
     );

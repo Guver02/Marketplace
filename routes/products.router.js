@@ -15,6 +15,27 @@ router.get('/', async (req, res) => {
     res.json(products)
 })
 
+router.get('/top-sales', async (req, res) => {
+
+    const randomNumbers = [];
+    for(let i = 0; i < 5 ; i++){
+        randomNumbers.push(Math.floor(Math.random() * 21));
+    }
+    console.log(randomNumbers)
+
+
+    const topSales = await models.products.findAll({
+        where: {
+            id: randomNumbers
+        },
+        include: ['images']
+    })
+
+    console.log(topSales)
+
+    res.json(topSales)
+})
+
 router.get('/:id', async (req, res) => {
     const { id } = req.params
     const rsp = await models.products.findByPk(id, {
@@ -24,8 +45,11 @@ router.get('/:id', async (req, res) => {
     res.json(rsp)
 })
 
+
+
 router.post('/by-ids', async (req, res) => {
     const { ids } = req.body
+
     if (!Array.isArray(ids) || ids.length === 0) {
         return res.status(400).json({
                 error: true,
@@ -37,9 +61,10 @@ router.post('/by-ids', async (req, res) => {
         where: {
             id: ids
         },
-        attributes: ['id', 'product', 'price', 'image'],
+        attributes: ['id', 'product', 'price'],
         include: ['images']
     })
+
 
     const productsPlain = rsp.map(product => product.get({ plain: true }));
 
@@ -71,35 +96,4 @@ router.post('/create',
         res.json(productCreated)
 })
 
-router.get('/light/:id', async (req, res) => {
-    const { id } = req.params
-    const rsp = await models.products.findByPk(id, {
-        attributes: ['id', 'product', 'image']
-    })
-    res.json(rsp)
-})
-
-router.get('/test/:id', async (req, res) => {
-    const { id } = req.params
-    console.log(id)
-    const productData = await models.products.findByPk(id, {
-        include: ['myCategories']
-    })
-    const productParse = productData.get({ plain: true });
-    const rsp = await models.products.findAll({
-        attributes: ['id', 'product'],
-        include: [
-            {
-                model: models.categories,
-                as: 'myCategories',
-                where: { id: productParse.myCategories[0].id },
-                attributes: []
-            }
-        ],
-        order: sequelize.literal('RAND()'),
-        limit: 3
-    });
-
-    res.json(rsp)
-})
 module.exports = router 

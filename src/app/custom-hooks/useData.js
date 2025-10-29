@@ -89,8 +89,6 @@ function useData () {
         if (!loadCart && !loadUser && !loadIsLogging) setLoading(false)
     }, [loadCart, loadUser])
 
-    console.log(isLoging)
-
     return [state, dispatch, loading]
 }
 

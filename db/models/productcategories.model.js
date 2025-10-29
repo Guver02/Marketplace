@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 
-const PRODUCT_CATEGORIES_TABLE = 'productcategories';
+const PRODUCT_CATEGORIES_TABLE = 'product_categories';
 
 const schemaProductCategoriesSeq = {
   id: {

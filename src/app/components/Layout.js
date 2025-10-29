@@ -1,12 +1,25 @@
-import React from "react";
+import React, { createContext, useContext, useState } from "react";
 import { Navbar } from "../UI-components/Navbar";
 
-function Layout({ children }) {
+const LayoutContext = createContext()
 
-    return <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}>
-        <Navbar />
-        {children}
-    </div>
+const useLayout = () => useContext(LayoutContext)
+
+function Layout({ children }) {
+    const [navBarColor, setNavBarColor] = useState('#fff')
+
+    return (
+        <LayoutContext.Provider value={{setNavBarColor}}>
+            <div style={
+                {display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                width: '100vw' }}>
+                <Navbar navBarColor={navBarColor} />
+                {children}
+            </div>
+        </LayoutContext.Provider>
+    )
 }
 
-export { Layout }
+export { Layout, useLayout }

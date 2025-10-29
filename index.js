@@ -39,5 +39,5 @@ app.use(midd.errorHandler)
 
 
 server.listen(port, () => {
-    console.log("conected in host:" + port + "/");
+    console.log("Servidor en el puerto: " + port);
 })

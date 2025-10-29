@@ -1,7 +1,7 @@
 require('dotenv').config();
 
  const config = {  
-    env:process.env.NODE_ENV||'dev',
+    env:process.env.NODE_ENV,
     port:process.env.PORT||3000,
 
     dbUser:process.env.DB_USER,
@@ -13,6 +13,9 @@ require('dotenv').config();
     apiKey:process.env.API_KEY,
     secret:process.env.SECRET,
     uriLink:process.env.URI,
+
+    adminPassword: process.env.ADMIN_PASSWORD,
+
     publicKey: process.env.PUBLIC_KEY,
     privateKey: process.env.PRIVATE_KEY,
     openaiKey: process.env.OPENAI_KEY

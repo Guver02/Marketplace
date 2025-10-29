@@ -8,9 +8,14 @@
     z-index: 9999;
 }
 
-.modal {
+.modal{
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     position: relative;
+    transform: translateY(200%);
+    transition: transform 0.5s ease-in-out;
+}
+.showModal{
+    transform: translateY(0);
 }

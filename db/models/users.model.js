@@ -1,4 +1,7 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
+const { ROLES_TABLE } = require('./roles.model');
+const { USER_ROLES_TABLE } = require('./userroles.model');
+const { CUSTOMER_TABLE } = require('./customer.model');
 
 const USERS_TABLE = 'users';
 
@@ -28,13 +31,21 @@ const schemaUsersSeq = {
     role: {
         type: Sequelize.ENUM('customer','seller','admin'),
         allowNull: false,
-        defaultValue: 'cliente'
+        defaultValue: 'customer'
     }
 
 };
 
 class User extends Model {
     static associate(models) {
+        this.belongsToMany(models[ROLES_TABLE], {
+            through: models[USER_ROLES_TABLE],
+            foreignKey: 'user_id'
+        })
+
+        this.hasOne(models[CUSTOMER_TABLE], {foreignKey: 'user_id'})
+        this.hasOne(models[SELLER_TABLE], {foreignKey: 'user_id'})
+        this.hasOne(models[ADMIN_TABLE], {foreignKey: 'user_id'})
     }
 
     static config(sequelize) {

@@ -14,7 +14,6 @@ router.get('/my-cart',
                 where: {
                     userid: userID
                 },
-                
             })
 
             res.json(shoppingCart)

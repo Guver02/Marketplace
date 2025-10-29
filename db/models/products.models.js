@@ -1,9 +1,11 @@
-const { DataTypes, Model } = require('sequelize')
+const { Sequelize ,DataTypes, Model } = require('sequelize');
+const { PRODUCT_CATEGORIES_TABLE } = require('./productcategories.model');
+const { PRODUCT_IMAGES_TABLE } = require('./productimages.models');
+const { USERS_TABLE } = require('./users.model');
 
 const PRODUCTS_TABLE = 'products'
 
 const schemaProductsSeq = {
-
     id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,12 +18,10 @@ const schemaProductsSeq = {
         allowNull: false
     },
     providerid: {
-        type: DataTypes.INTEGER,
-
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-
         references: {
-            model: 'providers',
+            model: 'users',
             key: 'id',
         },
     },
@@ -41,36 +41,24 @@ const schemaProductsSeq = {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    image: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        default: '',
-    },
 }
 
 class Products extends Model {
-
     static associate(models) {
-        this.belongsTo(models.providers, {
+        this.belongsTo(models[USERS_TABLE], {
             foreignKey: 'providerid',
             as: 'myProviders'
         })
 
         this.belongsToMany(models.categories, {
-            through: models.productcategories,
+            through: models[PRODUCT_CATEGORIES_TABLE],
             as: 'myCategories',
         });
 
-        this.belongsToMany(models.colors, {
-            through: models.productcolors,
-            as: 'myColors',
-        });
-
-        this.hasMany(models.productimages, {
+        this.hasMany(models[PRODUCT_IMAGES_TABLE], {
             foreignKey: 'productid',
             as: 'images',
         });
-
     }
 
     static config(sequelize) {

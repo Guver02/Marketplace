@@ -1,41 +1,54 @@
-body{
-    margin: 0;
-    padding: 0;
-}
-body::-webkit-scrollbar{
-    display: none;
-}
-.container{
+.container {
     width: 100vw;
-    height: 100vh;
-    overflow: auto;
-    position: absolute;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: scroll;
 }
+.scrollContainer{
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+}
+.scrollContainer::-webkit-scrollbar, 
 .container::-webkit-scrollbar{
     display: none;
 }
-
-.colorsContainer{
-    width: 100%;
-    height: 92vh;
-    margin-top: 8vh;
+.sliderBanner {
     box-sizing: border-box;
-    position: relative;
+    width: max-content;
     display: flex;
-    flex-direction: column
+    flex-direction: row;
+    height: 100%;
 }
-.topColor{
-    background-color: #9db496;
+.colorsContainer {
+    position: relative;
+    width: 100vw;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
+
+.topColor {
+    /*background-color: #fff;*/
+    /*#9db496*/
     width: 100%;
     height: 84%;
 }
-.bottomColor{
+
+.bottomColor {
     background-color: #d1c4ab;
     width: 100%;
     height: 16%
 }
 
-.banner{
+.banner {
     position: absolute;
     background-color: transparent;
     width: 100%;
@@ -52,7 +65,7 @@ body::-webkit-scrollbar{
     box-sizing: border-box;
 }
 
-.productImage{
+.productImage {
     width: 44%;
     height: 100%;
     background-color: transparent;
@@ -60,20 +73,23 @@ body::-webkit-scrollbar{
     justify-content: center;
     align-items: center;
 }
-.principalImg{
+
+.principalImg {
+    overflow: hidden;
     width: 100%;
     height: 100%;
     object-fit: contain;
     transform: translateY(4%);
     opacity: 1;
-    transition: opacity 0.5s ease-in-out,  transform 0.5s ease;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease;
 }
-.hiddenImg{
+
+.hiddenImg {
     opacity: 0;
     transform: scale(1.1) skewX(1deg) skewY(1deg);
 }
 
-.productInfo{
+.productInfo {
     width: 56%;
     height: 100%;
     background-color: transparent;
@@ -88,16 +104,17 @@ body::-webkit-scrollbar{
 
 
 @media screen and (max-width: 767px) {
-    .banner{
+    .banner {
         flex-direction: column;
     }
-    .productImage{
+
+    .productImage {
         width: 100%;
         height: 44%;
     }
-    .productInfo{
+
+    .productInfo {
         height: 56%;
         width: 100%;
     }
 }
-

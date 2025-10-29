@@ -2,11 +2,17 @@ import React from 'react';
 import styles from './ProductCard.module.css';
 import { ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import {useStore} from '../providers/ItemsContex'
+import { useStore } from '../providers/ItemsContex'
+import { useIntersection } from '../custom-hooks/useIntersection';
 
 const ProductCard = ({ product }) => {
-    const {addToCart} = useStore()
+    const { addToCart } = useStore()
     const navigate = useNavigate()
+    const [cardElem, cardIsIntersecting] = useIntersection({
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.4
+    })
 
     const handleProduct = () => {
         navigate(`/${product.id}`)
@@ -14,19 +20,19 @@ const ProductCard = ({ product }) => {
 
     const handleAddToCart = async (event) => {
         event.stopPropagation();
-
         addToCart({
-            productId : product.id,
-            quantity : 1,
-            })
+            productId: product.id,
+            quantity: 1,
+        })
     }
 
     return (
-        <div className={styles.card}
-            onClick={handleProduct}>
+        <div className={`${styles.card} ${cardIsIntersecting ? styles.showCard : ''}`}
+            onClick={handleProduct}
+            ref={cardElem}>
 
             <div className={styles.imageContainer}>
-                <img src={product.images[0].imageurl} alt={product.product} className={styles.image} />
+                <img src={product.images[0]?.imageurl} alt={product.product} className={styles.image} />
             </div>
 
             <div className={styles.info}>
@@ -46,6 +52,7 @@ const ProductCard = ({ product }) => {
                         <span>Add to cart</span>
                     </button>
                 </div>
+                
             </div>
 
         </div>

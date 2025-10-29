@@ -1,63 +1,58 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
-const {PRODUCTS_TABLE} = require('./products.models')
+const { PRODUCTS_TABLE } = require('./products.models')
 
-const SHOPPING_CART_TABLE = 'shoppingcart';
+const SHOPPING_CART_TABLE = 'shopping_cart';
 
 const shoppingCartSchema = {
-  id: {
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataTypes.INTEGER.UNSIGNED,
-  },
-  userid: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 1,
-    /*references: {
-        model: PRODUCTS_TABLE,
-        key: 'id'
-    }*/
-  },
-  createdat: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-  productid: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    allowNull: false,
+    id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER.UNSIGNED,
+    },
+    userid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    createdat: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+    },
+    productid: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
 
-    references: {
-        model: PRODUCTS_TABLE,
-        key: 'id'
+        references: {
+            model: PRODUCTS_TABLE,
+            key: 'id'
+        }
+    },
+    quantity: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false,
     }
-  },
-  quantity: {
-    type: DataTypes.INTEGER,
-    defaultValue: 1,
-    allowNull: false,
-  }
 };
 
 class ShoppingCart extends Model {
-  static associate(models) {
-    this.belongsTo(models.products, {
-      foreignKey: 'productid',
-      as: 'productInCart',
-    });
-  }
+    static associate(models) {
+        this.belongsTo(models.products, {
+            foreignKey: 'productid',
+            as: 'productInCart',
+        });
+    }
 
-  static config(sequelize) {
-    return {
-      sequelize,
-      modelName: SHOPPING_CART_TABLE,
-    };
-  }
+    static config(sequelize) {
+        return {
+            sequelize,
+            modelName: SHOPPING_CART_TABLE,
+        };
+    }
 }
 
 module.exports = {
-  SHOPPING_CART_TABLE,
-  ShoppingCart,
-  shoppingCartSchema,
+    SHOPPING_CART_TABLE,
+    ShoppingCart,
+    shoppingCartSchema,
 };

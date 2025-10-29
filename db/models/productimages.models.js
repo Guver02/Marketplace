@@ -1,6 +1,6 @@
-const {DataTypes, Model } = require('sequelize');
+const { Sequelize ,DataTypes, Model } = require('sequelize');
 
-const PRODUCT_IMAGES_TABLE = 'productimages';
+const PRODUCT_IMAGES_TABLE = 'product_images';
 
 const schemaProductImagesSeq = {
   id: {

@@ -3,64 +3,48 @@ const { Sequelize, DataTypes, Model } = require('sequelize');
 const ORDERS_TABLE = 'orders';
 
 const schemaOrdersSeq = {
-  id: {
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataTypes.INTEGER.UNSIGNED,
-  },
-  userid: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 1
-    /*references: {
-      model: 'users',
-      key: 'id',
-    },*/
-  },
-  status: {
-    type: DataTypes.STRING(250),
-    allowNull: false,
-    defaultValue: 'sin enviar'
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    defaultValue: ''
-  },
-  productid: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'products',
-      key: 'id',
+    id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER.UNSIGNED,
     },
-  },
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 1,
-  },
+    userid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    status: {
+        type: Sequelize.ENUM(
+            'pending',
+            'paid',
+            'processing',
+            'shipped',
+            'in_transit',
+            'delivered',
+            'returned',
+            'refunded',
+            'cancelled',
+            'failed'
+        ),
+        allowNull: false,
+        defaultValue: 'pending'
+    },
+    total: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+    }
 };
 
 class Orders extends Model {
-  static associate(models) {
-    this.belongsTo(models.products, {
-      foreignKey: 'productid',
-      as: 'myProduct',
-    });
-/*this.belongsTo(models.products, {
-      foreignKey: 'productid',
-      as: 'product',
-    });*/
-  }
+    static associate(models) {
+    }
 
-  static config(sequelize) {
-    return {
-      sequelize,
-      modelName: ORDERS_TABLE,
-    };
-  }
+    static config(sequelize) {
+        return {
+            sequelize,
+            modelName: ORDERS_TABLE,
+        };
+    }
 }
 
 module.exports = { ORDERS_TABLE, Orders, schemaOrdersSeq };
